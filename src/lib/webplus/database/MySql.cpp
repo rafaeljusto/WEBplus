@@ -142,4 +142,14 @@ MySql::execute(const string &query, const ResultMode resultMode)
 	return boost::shared_ptr<Result>(new MySqlResult(result));
 }
 
+unsigned long long MySql::getAffectedRows()
+{
+	return mysql_affected_rows(&_mysql);
+}
+
+unsigned long long MySql::getLastInsertedId()
+{
+	return mysql_insert_id(&_mysql);
+}
+
 WEBPLUS_DATABASE_NS_END

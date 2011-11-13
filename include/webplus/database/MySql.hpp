@@ -57,6 +57,9 @@ public:
 	boost::shared_ptr<Result>
 	execute(const string &query, const ResultMode resultMode = STORE_RESULT);
 
+	unsigned long long getAffectedRows();
+	unsigned long long getLastInsertedId();
+
 private:
 	MYSQL _mysql;
 	TransactionMode _transactionMode;
