@@ -53,14 +53,7 @@ public:
 	
 	template<class T> T get(const string &key) const
 	{
-		auto result = _row.find(key);
-		if (result == _row.end()) {
-			throw DatabaseException(DatabaseException::UNKNOW_KEY_ERROR, 
-			                        __FILE__, __FUNCTION__, __LINE__, 
-			                        "Column " + key + " not found in result set");
-		}
-		
-		return boost::lexical_cast<T>(result->second);
+		return boost::lexical_cast<T>(get(key));
 	}
 
 private:
