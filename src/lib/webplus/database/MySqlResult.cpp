@@ -50,7 +50,7 @@ bool MySqlResult::fetch()
 	unsigned int numberOfFields = mysql_num_fields(_result);
 	for (unsigned int i = 0; i < numberOfFields; i++) {
 		MYSQL_FIELD *field = mysql_fetch_field_direct(_result, i);
-		_row[field->name] = (string) row[i];
+		_row[field->name] = static_cast<string>(row[i]);
 	}
 
 	return true;
