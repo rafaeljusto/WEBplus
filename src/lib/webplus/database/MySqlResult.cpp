@@ -19,7 +19,6 @@
 
 #include <webplus/database/DatabaseException.hpp>
 #include <webplus/database/MySqlResult.hpp>
-#include <webplus/database/Result.hpp>
 
 WEBPLUS_DATABASE_NS_BEGIN
 
