@@ -89,7 +89,7 @@ if (verbose == "0"):
 # Libraries
 
 libraries = {
-    "WEBPLUS" : ["webplus", "boost_system", "boost_regex", "mysqlclient"]
+    "WEBPLUS" : ["webplus", "boost_date_time", "mysqlclient"]
     }
 
 def getLibraries(names):

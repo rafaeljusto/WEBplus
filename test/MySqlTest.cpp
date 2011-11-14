@@ -17,12 +17,19 @@
   along with WEBplus.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <memory>
+
 #include <boost/any.hpp>
-#include <boost/shared_ptr.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 #include <webplus/database/DatabaseException.hpp>
 #include <webplus/database/MySql.hpp>
 #include <webplus/database/MySqlResult.hpp>
+
+using std::shared_ptr;
+
+using boost::posix_time::ptime;
+using boost::posix_time::time_from_string;
 
 using webplus::database::DatabaseException;
 using webplus::database::MySql;
@@ -76,22 +83,26 @@ BOOST_AUTO_TEST_CASE(mustInsertAndSelectDataWithoutErrors)
 	                                   "value VARCHAR(255), "
 	                                   "date DATETIME"
 	                                   ")"));
+
 	BOOST_CHECK_NO_THROW(mysql.execute("INSERT INTO test(value, date) "
 	                                   "VALUES ("
 	                                   "'This is a test', "
-	                                   "'2011-11-11 11:11:11')"));
+	                                   "'2011-11-11 11:11:11'"
+	                                   ")"));
 
-	boost::shared_ptr<MySqlResult> result;
-	BOOST_CHECK_NO_THROW(result = boost::dynamic_pointer_cast
+	shared_ptr<MySqlResult> result;
+	BOOST_CHECK_NO_THROW(result = std::dynamic_pointer_cast
 	                     <MySqlResult>(mysql.execute("SELECT id, value, date "
 	                                                 "FROM test")));
 
 	while (result->fetch()) {
 		int id = result->get<int>("id");
 		string value = result->get<string>("value");
+		//ptime date = result->get<ptime>("date");
 
 		BOOST_CHECK_EQUAL(id, 1);
 		BOOST_CHECK_EQUAL(value, "This is a test");
+		//BOOST_CHECK_EQUAL(date, time_from_string("2011-11-11 11:11:11"));
 	}
 }
 

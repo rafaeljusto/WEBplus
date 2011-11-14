@@ -109,8 +109,8 @@ void MySql::rollback()
 	}
 }
 
-boost::shared_ptr<Result> 
-MySql::execute(const string &query, const ResultMode resultMode)
+std::shared_ptr<Result> MySql::execute(const string &query, 
+                                       const ResultMode resultMode)
 {
 	if (mysql_real_query(&_mysql, query.c_str(), query.size()) != 0) {
 		throw DatabaseException(DatabaseException::EXECUTION_ERROR, 
@@ -119,7 +119,7 @@ MySql::execute(const string &query, const ResultMode resultMode)
 	}
 
 	if (mysql_field_count(&_mysql) == 0) {
-		return boost::shared_ptr<Result>();
+		return std::shared_ptr<Result>();
 	}
 
 	MYSQL_RES *result = NULL;
@@ -139,7 +139,7 @@ MySql::execute(const string &query, const ResultMode resultMode)
 		                        mysql_error(&_mysql));
 	}
 
-	return boost::shared_ptr<Result>(new MySqlResult(result));
+	return std::shared_ptr<Result>(new MySqlResult(result));
 }
 
 unsigned long long MySql::getAffectedRows()

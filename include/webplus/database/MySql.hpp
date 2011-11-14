@@ -54,7 +54,7 @@ public:
 	void commit();
 	void rollback();
 
-	boost::shared_ptr<Result>
+	std::shared_ptr<Result>	
 	execute(const string &query, const ResultMode resultMode = STORE_RESULT);
 
 	unsigned long long getAffectedRows();

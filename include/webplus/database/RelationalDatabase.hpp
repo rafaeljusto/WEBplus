@@ -20,9 +20,8 @@
 #ifndef __WEB_PLUS_DATABASE_RELATIONAL_DATABASE_HPP__
 #define __WEB_PLUS_DATABASE_RELATIONAL_DATABASE_HPP__
 
+#include <memory>
 #include <string>
-
-#include <boost/shared_ptr.hpp>
 
 #include <webplus/Webplus.hpp>
 
@@ -65,7 +64,7 @@ public:
 	virtual void commit() = 0;
 	virtual void rollback() = 0;
 
-	virtual boost::shared_ptr<Result> 
+	virtual std::shared_ptr<Result> 
 	execute(const string &query, const ResultMode resultMode = STORE_RESULT) = 0;
 
 	virtual unsigned long long getAffectedRows() = 0;
