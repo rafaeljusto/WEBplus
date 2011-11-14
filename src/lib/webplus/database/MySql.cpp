@@ -142,12 +142,12 @@ std::shared_ptr<Result> MySql::execute(const string &query,
 	return std::shared_ptr<Result>(new MySqlResult(result));
 }
 
-unsigned long long MySql::getAffectedRows()
+unsigned long long MySql::affectedRows()
 {
 	return mysql_affected_rows(&_mysql);
 }
 
-unsigned long long MySql::getLastInsertedId()
+unsigned long long MySql::lastInsertedId()
 {
 	return mysql_insert_id(&_mysql);
 }

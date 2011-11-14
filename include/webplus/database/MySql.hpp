@@ -57,8 +57,8 @@ public:
 	std::shared_ptr<Result>	
 	execute(const string &query, const ResultMode resultMode = STORE_RESULT);
 
-	unsigned long long getAffectedRows();
-	unsigned long long getLastInsertedId();
+	unsigned long long affectedRows();
+	unsigned long long lastInsertedId();
 
 private:
 	MYSQL _mysql;

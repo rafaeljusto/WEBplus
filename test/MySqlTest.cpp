@@ -64,36 +64,37 @@ BOOST_AUTO_TEST_CASE(mustExecuteWithoutErrors)
 	MySql mysql;
 	mysql.connect("webplus", "root", "abc123", "127.0.0.1");
 
-	BOOST_CHECK_NO_THROW(mysql.execute("DROP TABLE IF EXISTS test"));
-	BOOST_CHECK_NO_THROW(mysql.execute("CREATE TABLE test ("
-	                                   "id INT(11) PRIMARY KEY AUTO_INCREMENT, "
-	                                   "value VARCHAR(255), "
-	                                   "date DATETIME"
-	                                   ")"));
+	string sql = "DROP TABLE IF EXISTS test";
+	BOOST_CHECK_NO_THROW(mysql.execute(sql));
+
+	sql = "CREATE TABLE test (id INT(11) PRIMARY KEY AUTO_INCREMENT, "
+		"value VARCHAR(255), date DATETIME)";
+	BOOST_CHECK_NO_THROW(mysql.execute(sql));
 }
 
-BOOST_AUTO_TEST_CASE(mustInsertAndSelectDataWithoutErrors)
+BOOST_AUTO_TEST_CASE(mustInsertAndSelectData)
 {
 	MySql mysql;
 	mysql.connect("webplus", "root", "abc123", "127.0.0.1");
 
-	BOOST_CHECK_NO_THROW(mysql.execute("DROP TABLE IF EXISTS test"));
-	BOOST_CHECK_NO_THROW(mysql.execute("CREATE TABLE test ("
-	                                   "id INT(11) PRIMARY KEY AUTO_INCREMENT, "
-	                                   "value VARCHAR(255), "
-	                                   "date DATETIME"
-	                                   ")"));
+	string sql = "DROP TABLE IF EXISTS test";
+	mysql.execute(sql);
 
-	BOOST_CHECK_NO_THROW(mysql.execute("INSERT INTO test(value, date) "
-	                                   "VALUES ("
-	                                   "'This is a test', "
-	                                   "'2011-11-11 11:11:11'"
-	                                   ")"));
+	sql = "CREATE TABLE test (id INT(11) PRIMARY KEY AUTO_INCREMENT, "
+		"value VARCHAR(255), date DATETIME)";
+	mysql.execute(sql);
 
-	shared_ptr<MySqlResult> result;
-	BOOST_CHECK_NO_THROW(result = std::dynamic_pointer_cast
-	                     <MySqlResult>(mysql.execute("SELECT id, value, date "
-	                                                 "FROM test")));
+	sql = "INSERT INTO test(value, date) "
+		"VALUES ('This is a test', '2011-11-11 11:11:11')";
+	mysql.execute(sql);
+
+	BOOST_CHECK_EQUAL(mysql.affectedRows(), 1);
+
+	sql = "SELECT id, value, date FROM test";
+	shared_ptr<MySqlResult> result = 
+		std::dynamic_pointer_cast<MySqlResult>(mysql.execute(sql));
+
+	BOOST_CHECK_EQUAL(result->size(), 1);
 
 	while (result->fetch()) {
 		int id = result->get<int>("id");

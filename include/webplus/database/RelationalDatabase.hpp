@@ -67,8 +67,8 @@ public:
 	virtual std::shared_ptr<Result> 
 	execute(const string &query, const ResultMode resultMode = STORE_RESULT) = 0;
 
-	virtual unsigned long long getAffectedRows() = 0;
-	virtual unsigned long long getLastInsertedId() = 0;
+	virtual unsigned long long affectedRows() = 0;
+	virtual unsigned long long lastInsertedId() = 0;
 };
 
 WEBPLUS_DATABASE_NS_END
