@@ -52,15 +52,10 @@ public:
 	string get(const string &key) const;
 	
 	template<class T> 
-	T get(const string &key, T (*converter)(const string&) = NULL) const
+	T get(const string &key, T (*converter)(const string&) = 
+	      boost::lexical_cast<T>) const
 	{
-		string value = get(key);
-
-		if (converter) {
-			return converter(value);
-		}
-
-		return boost::lexical_cast<T>(value);
+		return converter(get(key));
 	}
 
 private:
