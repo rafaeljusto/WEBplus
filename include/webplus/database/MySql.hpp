@@ -54,6 +54,8 @@ public:
 	void commit();
 	void rollback();
 
+	string escape(const string &value);
+
 	std::shared_ptr<Result>	
 	execute(const string &query, const ResultMode resultMode = STORE_RESULT);
 

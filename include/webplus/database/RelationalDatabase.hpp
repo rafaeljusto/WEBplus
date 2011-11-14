@@ -64,6 +64,8 @@ public:
 	virtual void commit() = 0;
 	virtual void rollback() = 0;
 
+	virtual string escape(const string &value) = 0;
+
 	virtual std::shared_ptr<Result> 
 	execute(const string &query, const ResultMode resultMode = STORE_RESULT) = 0;
 

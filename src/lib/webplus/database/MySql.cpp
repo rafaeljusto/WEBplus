@@ -109,6 +109,13 @@ void MySql::rollback()
 	}
 }
 
+string MySql::escape(const string &value)
+{
+	char escapedValue[value.size() + 1];
+	mysql_real_escape_string(&_mysql, escapedValue, value.c_str(), value.size());
+	return static_cast<string>(escapedValue);
+}
+
 std::shared_ptr<Result> MySql::execute(const string &query, 
                                        const ResultMode resultMode)
 {
