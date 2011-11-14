@@ -98,11 +98,11 @@ BOOST_AUTO_TEST_CASE(mustInsertAndSelectDataWithoutErrors)
 	while (result->fetch()) {
 		int id = result->get<int>("id");
 		string value = result->get<string>("value");
-		//ptime date = result->get<ptime>("date");
+		ptime date = result->get<ptime>("date", time_from_string);
 
 		BOOST_CHECK_EQUAL(id, 1);
 		BOOST_CHECK_EQUAL(value, "This is a test");
-		//BOOST_CHECK_EQUAL(date, time_from_string("2011-11-11 11:11:11"));
+		BOOST_CHECK_EQUAL(date, time_from_string("2011-11-11 11:11:11"));
 	}
 }
 
