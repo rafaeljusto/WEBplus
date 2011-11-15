@@ -43,7 +43,7 @@ WEBPLUS_DATABASE_NS_BEGIN
 class MySqlResult : public Result
 {
 public:
-	MySqlResult(MYSQL_RES *result);
+	explicit MySqlResult(MYSQL_RES *result);
 	~MySqlResult();
 
 	unsigned int size() const;
