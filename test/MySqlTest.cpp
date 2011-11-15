@@ -107,4 +107,59 @@ BOOST_AUTO_TEST_CASE(mustInsertAndSelectData)
 	}
 }
 
+BOOST_AUTO_TEST_CASE(mustRollbackData)
+{
+	MySql mysql;
+	mysql.connect("webplus", "root", "abc123", "127.0.0.1");
+
+	string sql = "DROP TABLE IF EXISTS test";
+	mysql.execute(sql);
+
+	sql = "CREATE TABLE test (id INT(11) PRIMARY KEY AUTO_INCREMENT, "
+		"value VARCHAR(255), date DATETIME) ENGINE=InnoDB";
+	mysql.execute(sql);
+
+	BOOST_CHECK_NO_THROW(mysql.setTransactionMode(MySql::MANUAL_COMMIT));
+
+	sql = "INSERT INTO test(value, date) "
+		"VALUES ('This is a test', '2011-11-11 11:11:11')";
+	mysql.execute(sql);
+
+	BOOST_CHECK_NO_THROW(mysql.rollback());
+
+	sql = "SELECT id, value, date FROM test";
+	shared_ptr<MySqlResult> result = 
+		std::dynamic_pointer_cast<MySqlResult>(mysql.execute(sql));
+
+	BOOST_CHECK_EQUAL(result->size(), 0);
+}
+
+BOOST_AUTO_TEST_CASE(mustCommitData)
+{
+	MySql mysql;
+	mysql.connect("webplus", "root", "abc123", "127.0.0.1");
+
+	string sql = "DROP TABLE IF EXISTS test";
+	mysql.execute(sql);
+
+	sql = "CREATE TABLE test (id INT(11) PRIMARY KEY AUTO_INCREMENT, "
+		"value VARCHAR(255), date DATETIME) ENGINE=InnoDB";
+	mysql.execute(sql);
+
+	BOOST_CHECK_NO_THROW(mysql.setTransactionMode(MySql::AUTO_COMMIT));
+
+	sql = "INSERT INTO test(value, date) "
+		"VALUES ('This is a test', '2011-11-11 11:11:11')";
+	mysql.execute(sql);
+
+	BOOST_CHECK_NO_THROW(mysql.commit());
+	BOOST_CHECK_NO_THROW(mysql.rollback());
+
+	sql = "SELECT id, value, date FROM test";
+	shared_ptr<MySqlResult> result = 
+		std::dynamic_pointer_cast<MySqlResult>(mysql.execute(sql));
+
+	BOOST_CHECK_EQUAL(result->size(), 1);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
