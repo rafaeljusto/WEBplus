@@ -20,7 +20,7 @@ Import("env", "libraryPath", "localBinInstall", "getLibraries")
 localLibraries = getLibraries(["WEBPLUS"])
 localLibraries.extend(["boost_unit_test_framework"])
 
-test = env.Program("test", 
-                   ["Main.cpp", "MySqlTest.cpp"], 
-                   LIBS = localLibraries, LIBPATH = libraryPath)
-env.Test("test.passed", test)
+#test = env.Program("test", 
+#                   ["Main.cpp"], 
+#                   LIBS = localLibraries, LIBPATH = libraryPath)
+#env.Test("test.passed", test)

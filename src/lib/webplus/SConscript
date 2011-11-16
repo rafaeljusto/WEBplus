@@ -24,7 +24,7 @@ sys.path.append(basePath + "/install")
 import installer
 
 webplusName = localLibraryInstall + "/" + os.getcwd().split("/")[-1]
-webplusLib = env.StaticLibrary(webplusName, Glob("*.cpp") + Glob("database/*.cpp"))
+webplusLib = env.StaticLibrary(webplusName, Glob("*.cpp"))
 
 opts = Variables(basePath + "/conf/webplus.conf", ARGUMENTS)
 installer.AddOptions(opts)
