@@ -17,17 +17,22 @@
   along with WEBplus.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <list>
+#include <map>
 #include <memory>
 
-#include <boost/any.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <webplus/database/DatabaseException.hpp>
 #include <webplus/database/MySql.hpp>
 #include <webplus/database/MySqlResult.hpp>
 
+using std::list;
+using std::map;
 using std::shared_ptr;
 
+using boost::lexical_cast;
 using boost::posix_time::ptime;
 using boost::posix_time::time_from_string;
 
@@ -105,6 +110,77 @@ BOOST_AUTO_TEST_CASE(mustInsertAndSelectData)
 		BOOST_CHECK_EQUAL(value, "This is a test");
 		BOOST_CHECK_EQUAL(date, time_from_string("2011-11-11 11:11:11"));
 	}
+}
+
+BOOST_AUTO_TEST_CASE(mustSelectAndBuildObjects)
+{
+	MySql mysql;
+	mysql.connect("webplus", "root", "abc123", "127.0.0.1");
+
+	string sql = "DROP TABLE IF EXISTS test";
+	mysql.execute(sql);
+
+	sql = "CREATE TABLE test (id INT(11) PRIMARY KEY AUTO_INCREMENT, "
+		"value VARCHAR(255), date DATETIME)";
+	mysql.execute(sql);
+
+	sql = "INSERT INTO test(value, date) "
+		"VALUES ('This is a test', '2011-11-11 11:11:11')";
+	mysql.execute(sql);
+
+	sql = "SELECT id, value, date FROM test";
+	shared_ptr<MySqlResult> result = 
+		std::dynamic_pointer_cast<MySqlResult>(mysql.execute(sql));
+
+	class Object {
+	public:
+		Object() : id(0), value("") {}
+
+		int id;
+		string value;
+		ptime date;
+	};
+
+	while (result->fetch()) {
+		auto object = result->get<Object>([](map<string, string> row) {
+				Object object;
+				object.id = lexical_cast<int>(row["id"]);
+				object.value = row["value"];
+				object.date = time_from_string(row["date"]);
+				return object;
+			});
+
+		BOOST_CHECK_EQUAL(object.id, 1);
+		BOOST_CHECK_EQUAL(object.value, "This is a test");
+		BOOST_CHECK_EQUAL(object.date, time_from_string("2011-11-11 11:11:11"));
+	}
+
+	sql = "INSERT INTO test(value, date) "
+		"VALUES ('This is another test', '2011-12-12 11:11:11')";
+	mysql.execute(sql);
+
+	sql = "SELECT id, value, date FROM test ORDER BY id";
+	result = std::dynamic_pointer_cast<MySqlResult>(mysql.execute(sql));
+
+	BOOST_CHECK_EQUAL(result->size(), 2);
+
+	list<Object> objects = result->getAll<Object>([](map<string, string> row) {
+			Object object;
+			object.id = lexical_cast<int>(row["id"]);
+			object.value = row["value"];
+			object.date = time_from_string(row["date"]);
+			return object;
+		});
+
+	Object object1 = objects.front();
+	BOOST_CHECK_EQUAL(object1.id, 1);
+	BOOST_CHECK_EQUAL(object1.value, "This is a test");
+	BOOST_CHECK_EQUAL(object1.date, time_from_string("2011-11-11 11:11:11"));
+	
+	Object object2 = objects.back();
+	BOOST_CHECK_EQUAL(object2.id, 2);
+	BOOST_CHECK_EQUAL(object2.value, "This is another test");
+	BOOST_CHECK_EQUAL(object2.date, time_from_string("2011-12-12 11:11:11"));
 }
 
 BOOST_AUTO_TEST_CASE(mustRollbackData)

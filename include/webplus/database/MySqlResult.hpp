@@ -24,6 +24,7 @@ extern "C" {
 #include <mysql/mysql.h>
 }
 
+#include <list>
 #include <map>
 
 #include <boost/lexical_cast.hpp>
@@ -56,6 +57,24 @@ public:
 	      boost::lexical_cast<T>) const
 	{
 		return converter(get(key));
+	}
+
+	template<class T> 
+	T get(T (*converter)(std::map<string, string>)) const
+	{
+		return converter(_row);
+	}
+
+	template<class T> 
+	std::list<T> getAll(T (*converter)(std::map<string, string>))
+	{
+		std::list<T> results;
+		
+		while(fetch()) {
+			results.push_back(get<T>(converter));
+		}
+
+		return results;
 	}
 
 private:

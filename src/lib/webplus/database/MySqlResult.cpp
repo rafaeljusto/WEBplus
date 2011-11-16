@@ -49,6 +49,9 @@ bool MySqlResult::fetch()
 	unsigned int numberOfFields = mysql_num_fields(_result);
 	for (unsigned int i = 0; i < numberOfFields; i++) {
 		MYSQL_FIELD *field = mysql_fetch_field_direct(_result, i);
+		// TODO: You cannot treat these as null-terminated strings if
+		// field values may contain binary data, because such values may
+		// contain null bytes internally
 		_row[field->name] = static_cast<string>(row[i]);
 	}
 
