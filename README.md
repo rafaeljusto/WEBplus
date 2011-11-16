@@ -11,14 +11,9 @@ Prerequisits
   * scons 2.0 - <http://www.scons.org/>
   * libboost-system-dev 1.4 - <http://www.boost.org>
   * libboost-test-dev 1.4 - <http://www.boost.org>
-  * libboost-date-time-dev 1.4 - <http://www.boost.org>
-  * libmysqlclient-dev 5.1 - <http://www.mysql.com/>
 
   The project was compiled using the above compilers and libraries,
   higher versions should work well.
-
-  To run the unit tests install the mysql-server, using abc123 as root
-  password and create the "webplus" database.
 
 Installation
 ------------
