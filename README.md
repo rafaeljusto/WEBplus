@@ -12,6 +12,8 @@ Prerequisits
   * libboost-system-dev 1.4 - <http://www.boost.org>
   * libboost-test-dev 1.4 - <http://www.boost.org>
   * libssl-dev 1.0 - <http://www.openssl.org>
+  * libcgiplus - <https://github.com/rafaeljusto/CGIplus>
+  * libdbplus - <https://github.com/rafaeljusto/DBplus>
 
   The project was compiled using the above compilers and libraries,
   higher versions should work well.
