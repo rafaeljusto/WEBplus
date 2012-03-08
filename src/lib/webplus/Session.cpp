@@ -57,17 +57,12 @@ string Session::buildHash(const string &id,
                           const string &ip,
                           const string &secret)
 {
-	SHA256_CTX context;
-	SHA256_Init(&context);
-
 	string data = id + ip + secret;
 	const unsigned char *rawData = 
 		reinterpret_cast<const unsigned char*>(data.c_str());
 
-	SHA256_Update(&context, rawData, data.size());
-
 	unsigned char hash[SHA256_DIGEST_LENGTH];
-	SHA256_Final(hash, &context);
+	SHA256(rawData, data.size(), hash);
 
 	return toHexadecimal(hash, SHA256_DIGEST_LENGTH);
 }
