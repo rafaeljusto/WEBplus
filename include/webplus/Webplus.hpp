@@ -17,7 +17,10 @@
   along with WEBplus.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define BOOST_TEST_MODULE WEBplus
-#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
+#ifndef __WEBPLUS_WEBPLUS_HPP__
+#define __WEBPLUS_WEBPLUS_HPP__
+
+#define WEBPLUS_NS_BEGIN namespace webplus {
+#define WEBPLUS_NS_END };
+
+#endif // __WEBPLUS_WEBPLUS_HPP__

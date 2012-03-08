@@ -1,4 +1,4 @@
-# WEBplus Copyright (C) 2011 Rafael Dantas Justo
+# WEBplus Copyright (C) 2012 Rafael Dantas Justo
 #
 # This file is part of WEBplus.
 #
@@ -89,7 +89,7 @@ if (verbose == "0"):
 # Libraries
 
 libraries = {
-    "WEBPLUS" : ["webplus", "boost_date_time", "mysqlclient"]
+    "WEBPLUS" : ["webplus", "crypto"]
     }
 
 def getLibraries(names):

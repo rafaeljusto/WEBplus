@@ -6,11 +6,12 @@ WEBplus
 Prerequisits
 ------------
 
-  * g++ 4.6 - <http://gcc.gnu.org/>
-  * python 2.7 - <http://www.python.org/>
-  * scons 2.0 - <http://www.scons.org/>
+  * g++ 4.6 - <http://gcc.gnu.org>
+  * python 2.7 - <http://www.python.org>
+  * scons 2.0 - <http://www.scons.org>
   * libboost-system-dev 1.4 - <http://www.boost.org>
   * libboost-test-dev 1.4 - <http://www.boost.org>
+  * libssl-dev 1.0 - <http://www.openssl.org>
 
   The project was compiled using the above compilers and libraries,
   higher versions should work well.
@@ -42,7 +43,7 @@ Contact
 License
 -------
 
-    CGIplus Copyright (C) 2011 Rafael Dantas Justo
+    CGIplus Copyright (C) 2012 Rafael Dantas Justo
 
     This file is part of CGIplus.
 

@@ -17,7 +17,34 @@
   along with WEBplus.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <webplus/Session.hpp>
+
+// When you need to run only one test, compile only this file with the
+// STAND_ALONE flag.
+#ifdef STAND_ALONE
 #define BOOST_TEST_MODULE WEBplus
+#endif
+
 #define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
+
+BOOST_AUTO_TEST_SUITE(webplusTests)
+
+BOOST_AUTO_TEST_CASE(mustCreateSessionCorrectly)
+{
+	webplus::Session session;
+	string hash = session.create("1", "127.0.0.1", "abc123");
+
+	string expected = 
+		"1-4928D2920EC018ED7597B4C0285B9045C618255BCE8DFF58E9F17664335C4275";
+	BOOST_CHECK_EQUAL(hash, expected);
+}
+
+BOOST_AUTO_TEST_CASE(mustCheckCreatedSessionCorrectly)
+{
+	webplus::Session session;
+	string hash = session.create("1", "127.0.0.1", "abc123");
+	BOOST_CHECK_EQUAL(session.check(hash, "127.0.0.1", "abc123"), true);
+}
+
+BOOST_AUTO_TEST_SUITE_END()

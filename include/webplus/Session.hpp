@@ -17,7 +17,28 @@
   along with WEBplus.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define BOOST_TEST_MODULE WEBplus
-#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
+#ifndef __WEBPLUS_SESSION_HPP__
+#define __WEBPLUS_SESSION_HPP__
+
+#include <string>
+
+#include "Webplus.hpp"
+
+using std::string;
+
+WEBPLUS_NS_BEGIN
+
+class Session
+{
+public:
+	string create(const string &id, const string &ip, const string &secret);
+	bool check(const string &data, const string &ip, const string &secret);
+
+private:
+	string buildHash(const string &id, const string &ip, const string &secret);
+	string toHexadecimal(const unsigned char *data, unsigned int size);
+};
+
+WEBPLUS_NS_END
+
+#endif // __WEBPLUS_SESSION_HPP__
