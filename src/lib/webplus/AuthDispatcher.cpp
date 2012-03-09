@@ -17,20 +17,21 @@
   along with WEBplus.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <iostream>
-
 #include <webplus/AuthDispatcher.hpp>
-#include <webplus/Dispatcher.hpp>
 #include <webplus/Session.hpp>
 
 WEBPLUS_NS_BEGIN
 
-void AuthDispatcher::
-run(Handler &handler, 
-    boost::function<dbplus::Database&(void)> databaseFactory,
-    boost::function<string(void)> retrieveSessionName,
-    boost::function<string(void)> retrieveSessionSecret,
-    boost::function<cgiplus::Builder(void)> redirectUnlogged)
+AuthDispatcher::AuthDispatcher(Handler &handler, std::ostream &output) :
+	_dispatcher(handler, output),
+	_output(&output)
+{
+}
+
+void AuthDispatcher::run(DatabaseFactory databaseFactory,
+                         RetrieveSessionName retrieveSessionName,
+                         RetrieveSessionSecret retrieveSessionSecret,
+                         RedirectUnlogged redirectUnlogged)
 {
 	cgiplus::Cgi cgi;
 	string cookieData = cgi(retrieveSessionName());
@@ -39,11 +40,10 @@ run(Handler &handler,
 
 	Session session;
 	if (session.check(cookieData, address, secret) == false) {
-		std::cout << redirectUnlogged().build();
+		*_output << redirectUnlogged().build();
 	
 	} else {
-		Dispatcher dispatcher;
-		dispatcher.run(handler, databaseFactory, cgi);
+		_dispatcher.run(databaseFactory, cgi);
 	}
 }
 

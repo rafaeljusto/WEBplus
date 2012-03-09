@@ -17,18 +17,19 @@
   along with WEBplus.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <iostream>
-
 #include <webplus/Dispatcher.hpp>
 
 WEBPLUS_NS_BEGIN
 
-void Dispatcher::
-run(Handler &handler, 
-    boost::function<dbplus::Database&(void)> databaseFactory, 
-    cgiplus::Cgi cgi)
+Dispatcher::Dispatcher(Handler &handler, std::ostream &output) :
+	_handler(handler),
+	_output(&output)
 {
-	std::cout << handler.run(cgi, databaseFactory()).build();
+}
+
+void Dispatcher::run(DatabaseFactory databaseFactory, cgiplus::Cgi cgi)
+{
+	*_output << _handler.run(cgi, databaseFactory()).build();
 }
 
 WEBPLUS_NS_END

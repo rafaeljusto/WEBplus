@@ -89,7 +89,9 @@ if (verbose == "0"):
 # Libraries
 
 libraries = {
-    "WEBPLUS" : ["webplus", "crypto"]
+    "CGIPLUS" : ["cgiplus", "boost_system", "boost_regex"],
+    "DBPLUS" : ["dbplus", "boost_date_time", "mysqlclient", "pq"],
+    "WEBPLUS" : ["webplus", "crypto"]   
     }
 
 def getLibraries(names):

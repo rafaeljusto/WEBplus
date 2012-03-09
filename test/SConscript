@@ -17,10 +17,10 @@
 
 Import("env", "libraryPath", "localBinInstall", "getLibraries")
 
-localLibraries = getLibraries(["WEBPLUS"])
+localLibraries = getLibraries(["CGIPLUS", "DBPLUS", "WEBPLUS"])
 localLibraries.extend(["boost_unit_test_framework"])
 
 test = env.Program("test", 
-                   ["Main.cpp", "SessionTest.cpp"], 
+                   ["Main.cpp", "SessionTest.cpp", "DispatcherTest.cpp"], 
                    LIBS = localLibraries, LIBPATH = libraryPath)
 env.Test("test.passed", test)
