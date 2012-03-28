@@ -65,14 +65,23 @@ void createFile()
 
 BOOST_AUTO_TEST_SUITE(webplusTests)
 
+BOOST_AUTO_TEST_CASE(mustNotAccessUnknowElement)
+{
+  createFile();
+
+  webplus::Config config(configTestFile);
+  BOOST_ASSERT(!config.get("dontExist"));
+  BOOST_ASSERT(!config["unknown"].get("dontExist"));
+}
+
 BOOST_AUTO_TEST_CASE(mustAccessFirstLevelValue)
 {
   createFile();
 
   webplus::Config config(configTestFile);
-  BOOST_CHECK_EQUAL(config.get("firstName"), "John");
-  BOOST_CHECK_EQUAL(config.get("lastName"), "Smith");
-  BOOST_CHECK_EQUAL(config.get<int>("age"), 25);
+  BOOST_CHECK_EQUAL(*config.get("firstName"), "John");
+  BOOST_CHECK_EQUAL(*config.get("lastName"), "Smith");
+  BOOST_CHECK_EQUAL(*config.get<int>("age"), 25);
 }
 
 BOOST_AUTO_TEST_CASE(mustAccessSecondLevelValue)
@@ -80,10 +89,10 @@ BOOST_AUTO_TEST_CASE(mustAccessSecondLevelValue)
   createFile();
 
   webplus::Config config(configTestFile);
-  BOOST_CHECK_EQUAL(config["address"].get("streetAddress"), "21 2nd Street");
-  BOOST_CHECK_EQUAL(config["address"].get("city"), "New York");
-  BOOST_CHECK_EQUAL(config["address"].get("state"), "NY");
-  BOOST_CHECK_EQUAL(config["address"].get("postalCode"), "10021");
+  BOOST_CHECK_EQUAL(*config["address"].get("streetAddress"), "21 2nd Street");
+  BOOST_CHECK_EQUAL(*config["address"].get("city"), "New York");
+  BOOST_CHECK_EQUAL(*config["address"].get("state"), "NY");
+  BOOST_CHECK_EQUAL(*config["address"].get("postalCode"), "10021");
 }
 
 BOOST_AUTO_TEST_CASE(mustAccessListValue)
@@ -105,10 +114,10 @@ BOOST_AUTO_TEST_CASE(mustAccessComplexListValue)
   createFile();
 
   webplus::Config config(configTestFile);
-  BOOST_CHECK_EQUAL(config["phoneNumber"][0].get("type"), "home");
-  BOOST_CHECK_EQUAL(config["phoneNumber"][0].get("number"), "212 555-1234");
-  BOOST_CHECK_EQUAL(config["phoneNumber"][1].get("type"), "fax");
-  BOOST_CHECK_EQUAL(config["phoneNumber"][1].get("number"), "646 555-4567");
+  BOOST_CHECK_EQUAL(*config["phoneNumber"][0].get("type"), "home");
+  BOOST_CHECK_EQUAL(*config["phoneNumber"][0].get("number"), "212 555-1234");
+  BOOST_CHECK_EQUAL(*config["phoneNumber"][1].get("type"), "fax");
+  BOOST_CHECK_EQUAL(*config["phoneNumber"][1].get("number"), "646 555-4567");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

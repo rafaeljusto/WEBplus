@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 
+#include <boost/optional.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 
@@ -43,7 +44,12 @@ public:
 
   Config& operator[](const string &section)
   {
-    _node = _node.get_child(section);
+    using namespace boost::property_tree;
+
+    if (boost::optional<ptree&> child = _node.get_child_optional(section)) {
+      _node = *child;
+    }
+
     return *this;
   }
 
@@ -65,9 +71,9 @@ public:
   }
 
   template<class T = string>
-  T get(const string &field)
+  boost::optional<T> get(const string &field)
   {
-    T value = _node.get<T>(field);
+    boost::optional<T> value = _node.get_optional<T>(field);
     _node = _root;
     return value;
   }
