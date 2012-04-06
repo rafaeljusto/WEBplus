@@ -23,6 +23,9 @@
 
 #include <dbplus/MySql.hpp>
 
+#include <cgiplus/Builder.hpp>
+#include <cgiplus/Cgi.hpp>
+
 #include <webplus/Dispatcher.hpp>
 #include <webplus/Handler.hpp>
 
@@ -68,7 +71,11 @@ BOOST_AUTO_TEST_CASE(mustDispatchCorrectly)
 	webplus::Dispatcher dispatcher(handler, output);
 	dispatcher.run(boost::bind(&DatabaseFactory::create, &databaseFactory));
 
-	BOOST_CHECK_EQUAL(output.str(), "Content-type: text/html\r\n\r\n");
+	BOOST_CHECK_EQUAL(output.str(), 
+	                  "Content-Type: text/html" + cgiplus::Builder::EOL +
+	                  "Content-Length: 0" + cgiplus::Builder::EOL +
+	                  "Content-Language: en-US" + cgiplus::Builder::EOL +
+	                  cgiplus::Builder::EOL);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
