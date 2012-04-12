@@ -36,10 +36,13 @@ WEBPLUS_NS_BEGIN
 class Config
 {
 public:
+  Config()
+  {
+  }
+
   Config(const string &filename)
   {
-    read_json(filename, _root);
-    _node = _root;
+    read(filename);
   }
 
   Config& operator[](const string &section)
@@ -68,6 +71,12 @@ public:
     }
 
     return *this;
+  }
+
+  void read(const string &filename)
+  {
+    read_json(filename, _root);
+    _node = _root;
   }
 
   template<class T = string>
