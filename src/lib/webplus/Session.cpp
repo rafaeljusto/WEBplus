@@ -34,50 +34,49 @@ WEBPLUS_NS_BEGIN
 
 string Session::create(const string &id, const string &ip, const string &secret)
 {
-	return id + "-" + buildHash(id, ip, secret);
+  return id + "-" + buildHash(id, ip, secret);
 }
 
 bool Session::check(const string &data, const string &ip, const string &secret)
 {
-	std::vector<string> dataParts;
-	boost::split(dataParts, data, boost::is_any_of("-"));
+  std::vector<string> dataParts;
+  boost::split(dataParts, data, boost::is_any_of("-"));
 
-	if (dataParts.size() != 2) {
-		return false;
-	}
+  if (dataParts.size() != 2) {
+    return false;
+  }
 
-	string id = dataParts[0];
-	string hash = dataParts[1];
-	string calculatedHash = buildHash(id, ip, secret);
+  string id = dataParts[0];
+  string hash = dataParts[1];
+  string calculatedHash = buildHash(id, ip, secret);
 
-	return (hash == calculatedHash);
+  return (hash == calculatedHash);
 }
 
 string Session::buildHash(const string &id,
                           const string &ip,
                           const string &secret)
 {
-	string data = id + ip + secret;
-	const unsigned char *rawData = 
-		reinterpret_cast<const unsigned char*>(data.c_str());
+  string data = id + ip + secret;
+  auto rawData = reinterpret_cast<const unsigned char*>(data.c_str());
 
-	unsigned char hash[SHA256_DIGEST_LENGTH];
-	SHA256(rawData, data.size(), hash);
+  unsigned char hash[SHA256_DIGEST_LENGTH];
+  SHA256(rawData, data.size(), hash);
 
-	return toHexadecimal(hash, SHA256_DIGEST_LENGTH);
+  return toHexadecimal(hash, SHA256_DIGEST_LENGTH);
 }
 
 string Session::toHexadecimal(const unsigned char *data, unsigned int size)
 {
-	std::stringstream output;
-	output << std::hex;
+  std::stringstream output;
+  output << std::hex;
 
-	for (unsigned int i = 0; i < size; i++) {
-		output << std::setw(2) << std::setfill('0') 
-		       << static_cast<unsigned>(data[i]);
-	}
+  for (unsigned int i = 0; i < size; i++) {
+    output << std::setw(2) << std::setfill('0')
+           << static_cast<unsigned>(data[i]);
+  }
 
-	return boost::to_upper_copy(output.str());
+  return boost::to_upper_copy(output.str());
 }
 
 WEBPLUS_NS_END
