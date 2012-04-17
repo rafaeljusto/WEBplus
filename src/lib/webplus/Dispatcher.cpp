@@ -22,14 +22,14 @@
 WEBPLUS_NS_BEGIN
 
 Dispatcher::Dispatcher(Handler &handler, std::ostream &output) :
-	_handler(handler),
-	_output(&output)
+  _handler(handler),
+  _output(&output)
 {
 }
 
 void Dispatcher::run(DatabaseFactory databaseFactory, cgiplus::Cgi cgi)
 {
-	*_output << _handler.run(cgi, databaseFactory()).build();
+  *_output << _handler.run(cgi, databaseFactory()).build();
 }
 
 WEBPLUS_NS_END

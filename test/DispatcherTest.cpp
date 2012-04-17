@@ -25,6 +25,9 @@
 
 #include <cgiplus/Builder.hpp>
 #include <cgiplus/Cgi.hpp>
+#include <cgiplus/HttpHeader.hpp>
+#include <cgiplus/Language.hpp>
+#include <cgiplus/MediaType.hpp>
 
 #include <webplus/Dispatcher.hpp>
 #include <webplus/Handler.hpp>
@@ -41,41 +44,43 @@
 class TestHandler : public webplus::Handler
 {
 public:
-	cgiplus::Builder run(const cgiplus::Cgi cgi, dbplus::Database &database)
-	{
-		return cgiplus::Builder();
-	}
+  cgiplus::Builder run(const cgiplus::Cgi cgi, dbplus::Database &database)
+  {
+    cgiplus::Builder builder;
+    builder->setContentType(cgiplus::MediaType::TEXT_HTML)
+      .addContentLanguage(cgiplus::Language::ENGLISH_US);
+    return builder;
+  }
 };
 
 class DatabaseFactory
 {
 public:
-	dbplus::Database& create()
-	{
-		_database.connect("dbplus", "root", "abc123", "127.0.0.1");
-		return _database;
-	}
+  dbplus::Database& create()
+  {
+    _database.connect("dbplus", "root", "abc123", "127.0.0.1");
+    return _database;
+  }
 
 private:
-	dbplus::MySql _database;
+  dbplus::MySql _database;
 };
 
 BOOST_AUTO_TEST_SUITE(webplusTests)
 
 BOOST_AUTO_TEST_CASE(mustDispatchCorrectly)
 {
-	TestHandler handler;
-	DatabaseFactory databaseFactory;
-	std::ostringstream output;
+  TestHandler handler;
+  DatabaseFactory databaseFactory;
+  std::ostringstream output;
 
-	webplus::Dispatcher dispatcher(handler, output);
-	dispatcher.run(boost::bind(&DatabaseFactory::create, &databaseFactory));
+  webplus::Dispatcher dispatcher(handler, output);
+  dispatcher.run(boost::bind(&DatabaseFactory::create, &databaseFactory));
 
-	BOOST_CHECK_EQUAL(output.str(), 
-	                  "Content-Type: text/html" + cgiplus::Builder::EOL +
-	                  "Content-Length: 0" + cgiplus::Builder::EOL +
-	                  "Content-Language: en-US" + cgiplus::Builder::EOL +
-	                  cgiplus::Builder::EOL);
+  BOOST_CHECK_EQUAL(output.str(),
+                    "Content-Type: text/html" + cgiplus::HttpHeader::EOL +
+                    "Content-Language: en-US" + cgiplus::HttpHeader::EOL +
+                    cgiplus::HttpHeader::EOL);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
