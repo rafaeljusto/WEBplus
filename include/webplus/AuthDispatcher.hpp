@@ -20,11 +20,10 @@
 #ifndef __WEBPLUS_AUTH_DISPATCHER_HPP__
 #define __WEBPLUS_AUTH_DISPATCHER_HPP__
 
+#include <functional>
 #include <iostream>
 #include <ostream>
 #include <string>
-
-#include <boost/function.hpp>
 
 #include <dbplus/Database.hpp>
 
@@ -38,23 +37,23 @@ using std::string;
 
 WEBPLUS_NS_BEGIN
 
-typedef boost::function<string(void)> RetrieveSessionName;
-typedef boost::function<string(void)> RetrieveSessionSecret;
-typedef boost::function<cgiplus::Builder(void)> RedirectUnlogged;
+typedef std::function<string(void)> RetrieveSessionName;
+typedef std::function<string(void)> RetrieveSessionSecret;
+typedef std::function<cgiplus::Builder(void)> RedirectUnlogged;
 
 class AuthDispatcher
 {
 public:
-	AuthDispatcher(Handler &handler, std::ostream &output = std::cout);
+    AuthDispatcher(Handler &handler, std::ostream &output = std::cout);
 
-	void run(DatabaseFactory databaseFactory,
-	         RetrieveSessionName retrieveSessionName,
-	         RetrieveSessionSecret retrieveSessionSecret,
-	         RedirectUnlogged redirectUnlogged);
+    void run(DatabaseFactory databaseFactory,
+             RetrieveSessionName retrieveSessionName,
+             RetrieveSessionSecret retrieveSessionSecret,
+             RedirectUnlogged redirectUnlogged);
 
 private:
-	Dispatcher _dispatcher;
-	std::ostream *_output;
+    Dispatcher _dispatcher;
+    std::ostream *_output;
 };
 
 WEBPLUS_NS_END

@@ -20,11 +20,10 @@
 #ifndef __WEBPLUS_DISPATCHER_HPP__
 #define __WEBPLUS_DISPATCHER_HPP__
 
+#include <functional>
 #include <iostream>
 #include <ostream>
 #include <string>
-
-#include <boost/function.hpp>
 
 #include <dbplus/Database.hpp>
 
@@ -37,18 +36,18 @@ using std::string;
 
 WEBPLUS_NS_BEGIN
 
-typedef boost::function<dbplus::Database&(void)> DatabaseFactory;
+typedef std::function<dbplus::Database&(void)> DatabaseFactory;
 
 class Dispatcher
 {
 public:
-	Dispatcher(Handler &handler, std::ostream &output = std::cout);
-	
-	void run(DatabaseFactory databaseFactory, cgiplus::Cgi cgi = cgiplus::Cgi());
+    Dispatcher(Handler &handler, std::ostream &output = std::cout);
+
+    void run(DatabaseFactory databaseFactory, cgiplus::Cgi cgi = cgiplus::Cgi());
 
 private:
-	Handler &_handler;
-	std::ostream *_output;
+    Handler &_handler;
+    std::ostream *_output;
 };
 
 WEBPLUS_NS_END
